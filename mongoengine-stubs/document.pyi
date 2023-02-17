@@ -72,9 +72,14 @@ class DynamicDocument(Document):
     def __getattr__(self, key: str) -> Any: ...
     def __setattr__(self, key: str, value: Any) -> None: ...
 
+class DynamicEmbeddedDocument(EmbeddedDocument):
+    def __getattr__(self, key: str) -> Any: ...
+    def __setattr__(self, key: str, value: Any) -> None: ...
+
 __all__ = [
     "DynamicDocument",
     "EmbeddedDocument",
+    "DynamicEmbeddedDocument",
     "Document",
     "BaseDocument",
 ]
