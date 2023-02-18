@@ -804,6 +804,90 @@ class DateTimeField(Generic[_ST, _GT], BaseField):
     def __set__(self, instance: Any, value: _ST) -> None: ...
     def __get__(self, instance: Any, owner: Any) -> _GT: ...
 
+class DateField(Generic[_ST, _GT], BaseField):
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[False] = ...,
+        default: None = ...,
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[datetime]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> DateField[Optional[datetime], Optional[datetime]]: ...
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[False] = ...,
+        default: Union[datetime, Callable[[], datetime]],
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[datetime]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> DateField[Optional[datetime], datetime]: ...
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[True],
+        default: None = ...,
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[datetime]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> DateField[datetime, datetime]: ...
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[True],
+        default: Union[datetime, Callable[[], datetime]],
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[datetime]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> DateField[Optional[datetime], datetime]: ...
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: bool = ...,
+        default: Union[datetime, None, Callable[[], datetime]] = ...,
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[True],
+        choices: Optional[Iterable[datetime]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> DateField[datetime, datetime]: ...
+    def __set__(self, instance: Any, value: _ST) -> None: ...
+    def __get__(self, instance: Any, owner: Any) -> _GT: ...
+
 class EmbeddedDocumentField(Generic[_ST, _GT], BaseField):
     @overload
     def __new__(
@@ -1271,6 +1355,74 @@ class GeoPointField(Generic[_ST, _GT], BaseField):
         verbose_name: Optional[str] = ...,
         help_text: Optional[str] = ...,
     ) -> GeoPointField[_Tuple2Like | None, list[float]]: ...
+    def __set__(self, instance: Any, value: _ST) -> None: ...
+    def __get__(self, instance: Any, owner: Any) -> _GT: ...
+
+class PointField(Generic[_ST, _GT], BaseField):
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[False] = ...,
+        default: None = ...,
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[str]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> PointField[_Tuple2Like | None, list[float] | None]: ...
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[False] = ...,
+        default: Union[_Tuple2Like, Callable[[], _Tuple2Like]],
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[str]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> PointField[_Tuple2Like | None, list[float]]: ...
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[True],
+        default: None = ...,
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[str]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> PointField[_Tuple2Like, list[float]]: ...
+    @overload
+    def __new__(
+        cls,
+        *,
+        db_field: str = ...,
+        name: Optional[str] = ...,
+        required: Literal[True],
+        default: Union[_Tuple2Like, Callable[[], _Tuple2Like]],
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: Literal[False] = ...,
+        choices: Optional[Iterable[str]] = ...,
+        null: bool = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
+    ) -> PointField[_Tuple2Like | None, list[float]]: ...
     def __set__(self, instance: Any, value: _ST) -> None: ...
     def __get__(self, instance: Any, owner: Any) -> _GT: ...
 
