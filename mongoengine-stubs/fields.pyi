@@ -1064,6 +1064,12 @@ class DictField(Generic[_T], ComplexBaseField):
     ) -> None: ...
     @overload
     def __set__(
+        self: DictField[IntField[Any, Any]],
+        instance: object,
+        value: Optional[Dict[str, int]],
+    ) -> None: ...
+    @overload
+    def __set__(
         self: DictField[ListField[StringField[Any, Any]]],
         instance: object,
         value: Optional[Dict[str, List[str]]],
@@ -1087,7 +1093,7 @@ class DictField(Generic[_T], ComplexBaseField):
     @overload
     def __get__(
         self: DictField[IntField[Any, Any]], instance: object, owner: object
-    ) -> Dict[int, str]: ...
+    ) -> Dict[str, int]: ...
     @overload
     def __get__(
         self: DictField[ListField[StringField[Any, Any]]],
