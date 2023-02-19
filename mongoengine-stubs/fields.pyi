@@ -1008,6 +1008,21 @@ class DictField(Generic[_T], ComplexBaseField):
         db_field: str = ...,
     ) -> DictField[StringField[Any, Any]]: ...
     @overload
+    def __new__(  # type: ignore
+        cls,
+        field: _T = ...,
+        required: bool = ...,
+        name: Optional[str] = ...,
+        unique: bool = ...,
+        unique_with: Union[str, Iterable[str]] = ...,
+        primary_key: bool = ...,
+        help_text: Optional[str] = ...,
+        default: Union[Dict[str, int], None, Callable[[], Dict[str, int]]] = ...,
+        choices: Optional[Iterable[Dict[str, int]]] = ...,
+        verbose_name: Optional[str] = ...,
+        db_field: str = ...,
+    ) -> DictField[IntField[Any, Any]]: ...
+    @overload
     def __new__(  # type: ignore [misc]
         cls,
         field: _T = ...,
@@ -1069,6 +1084,10 @@ class DictField(Generic[_T], ComplexBaseField):
     def __get__(
         self: DictField[StringField[Any, Any]], instance: object, owner: object
     ) -> Dict[str, str]: ...
+    @overload
+    def __get__(
+        self: DictField[IntField[Any, Any]], instance: object, owner: object
+    ) -> Dict[int, str]: ...
     @overload
     def __get__(
         self: DictField[ListField[StringField[Any, Any]]],
