@@ -21,11 +21,49 @@ from typing import (
     overload,
 )
 from uuid import UUID
-
 from bson import ObjectId
+from typing_extensions import Literal
+from typing import Sequence
+
 from mongoengine.base import BaseField, ComplexBaseField
 from mongoengine.document import Document
-from typing_extensions import Literal
+
+# Following fields are missing types
+# They are added here to avoid 'Module has no attribute' errors
+from mongoengine.fields import CachedReferenceField as CachedReferenceField
+from mongoengine.fields import FileField as FileField
+from mongoengine.fields import SequenceField as SequenceField
+from mongoengine.fields import GenericReferenceField as GenericReferenceField
+
+
+__all__ = [
+    "ObjectIdField",
+    "StringField",
+    "EmailField",
+    "IntField",
+    "FloatField",
+    "DecimalField",
+    "BooleanField",
+    "DateTimeField",
+    "DateField",
+    "EmbeddedDocumentField",
+    "DynamicField",
+    "ListField",
+    "DictField",
+    "EmbeddedDocumentListField",
+    "LazyReference",
+    "LazyReferenceField",
+    "URLField",
+    "UUIDField",
+    "GeoPointField",
+    "PointField",
+    "MapField",
+    "ReferenceField",
+    "EnumField",
+    "CachedReferenceField",
+    "FileField",
+    "SequenceField",
+]
 
 _T = TypeVar("_T")
 
@@ -47,6 +85,7 @@ class ObjectIdField(Generic[_ST, _GT], BaseField):
         primary_key: Literal[False] = ...,
         choices: Optional[Iterable[ObjectId]] = ...,
         null: bool = ...,
+        sparse: bool = ...,
         verbose_name: Optional[str] = ...,
         help_text: Optional[str] = ...,
     ) -> ObjectIdField[Optional[ObjectId], Optional[ObjectId]]: ...
@@ -64,6 +103,7 @@ class ObjectIdField(Generic[_ST, _GT], BaseField):
         primary_key: Literal[False] = ...,
         choices: Optional[Iterable[ObjectId]] = ...,
         null: bool = ...,
+        sparse: bool = ...,
         verbose_name: Optional[str] = ...,
         help_text: Optional[str] = ...,
     ) -> ObjectIdField[Optional[ObjectId], ObjectId]: ...
@@ -81,6 +121,7 @@ class ObjectIdField(Generic[_ST, _GT], BaseField):
         primary_key: Literal[False] = ...,
         choices: Optional[Iterable[ObjectId]] = ...,
         null: bool = ...,
+        sparse: bool = ...,
         verbose_name: Optional[str] = ...,
         help_text: Optional[str] = ...,
     ) -> ObjectIdField[ObjectId, ObjectId]: ...
@@ -98,6 +139,7 @@ class ObjectIdField(Generic[_ST, _GT], BaseField):
         primary_key: Literal[False] = ...,
         choices: Optional[Iterable[ObjectId]] = ...,
         null: bool = ...,
+        sparse: bool = ...,
         verbose_name: Optional[str] = ...,
         help_text: Optional[str] = ...,
     ) -> ObjectIdField[Optional[ObjectId], ObjectId]: ...
@@ -115,6 +157,7 @@ class ObjectIdField(Generic[_ST, _GT], BaseField):
         primary_key: Literal[True],
         choices: Optional[Iterable[ObjectId]] = ...,
         null: bool = ...,
+        sparse: bool = ...,
         verbose_name: Optional[str] = ...,
         help_text: Optional[str] = ...,
     ) -> ObjectIdField[ObjectId, ObjectId]: ...
@@ -902,7 +945,7 @@ class EmbeddedDocumentField(Generic[_ST, _GT], BaseField):
         document_type: Type[_T],
         required: Literal[False] = ...,
         *,
-        default: Union[_T, Callable[[], _T]],
+        default: Optional[Union[_T, Callable[[], _T]]],
         help_text: str = ...,
     ) -> EmbeddedDocumentField[Optional[_T], _T]: ...
     @overload
@@ -919,7 +962,7 @@ class EmbeddedDocumentField(Generic[_ST, _GT], BaseField):
         document_type: Type[_T],
         *,
         required: Literal[True],
-        default: Union[_T, Callable[[], _T]],
+        default: Optional[Union[_T, Callable[[], _T]]],
         help_text: str = ...,
     ) -> EmbeddedDocumentField[Optional[_T], _T]: ...
     def __set__(
@@ -937,30 +980,33 @@ class ListField(Generic[_T], ComplexBaseField):
     def __new__(
         cls,
         field: StringField[Any, Any] = ...,
+        max_length: Optional[int] = ...,
         required: bool = ...,
-        default: Optional[Union[List[Any], Callable[[], List[Any]]]] = ...,
-        verbose_name: str = ...,
-        help_text: str = ...,
+        default: Optional[Union[Sequence[Any], Callable[[], Sequence[Any]]]] = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
         null: bool = ...,
     ) -> ListField[StringField[Any, Any]]: ...
     @overload
     def __new__(
         cls,
         field: DictField[Any],
+        max_length: Optional[int] = ...,
         required: bool = ...,
-        default: Optional[Union[List[Any], Callable[[], List[Any]]]] = ...,
-        verbose_name: str = ...,
-        help_text: str = ...,
+        default: Optional[Union[Sequence[Any], Callable[[], Sequence[Any]]]] = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
         null: bool = ...,
     ) -> ListField[DictField[Any]]: ...
     @overload
     def __new__(
         cls,
         field: Any,
+        max_length: Optional[int] = ...,
         required: bool = ...,
-        default: Optional[Union[List[Any], Callable[[], List[Any]]]] = ...,
-        verbose_name: str = ...,
-        help_text: str = ...,
+        default: Optional[Union[Sequence[Any], Callable[[], Sequence[Any]]]] = ...,
+        verbose_name: Optional[str] = ...,
+        help_text: Optional[str] = ...,
         null: bool = ...,
     ) -> ListField[Any]: ...
     def __getitem__(self, arg: Any) -> _T: ...
@@ -991,7 +1037,7 @@ class ListField(Generic[_T], ComplexBaseField):
     ) -> List[Dict[str, Any]]: ...
 
 class DictField(Generic[_T], ComplexBaseField):
-    # not sure we need the init method overloads
+    # not sure if we need the init method overloads
     @overload
     def __new__(  # type: ignore
         cls,
@@ -1469,6 +1515,8 @@ class ReferenceField(BaseField):
     def __init__(
         self,
         model: Union[str, Type[Document]],
+        dbref: bool = ...,
+        reverse_delete_rule: int = ...,
         required: bool = ...,
         name: Optional[str] = ...,
         help_text: Optional[str] = ...,

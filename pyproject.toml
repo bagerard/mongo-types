@@ -10,8 +10,6 @@ keywords = ["mongoengine", "mongo", "types", "mypy", "stubs"]
 
 packages = [
   { include = "mongoengine-stubs" },
-  { include = "bson-stubs" },
-  { include = "pymongo-stubs" },
 ]
 
 [tool.poetry.dependencies]

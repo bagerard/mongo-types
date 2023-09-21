@@ -3,14 +3,26 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping, Optional, Type, TypeVar
 
 import mongoengine.errors as errors
-from mongoengine.base import BaseDocument
+from mongoengine.base import BaseDocument, BaseField
 from mongoengine.fields import StringField
 from pymongo.collection import Collection
 from typing_extensions import TypedDict
 
+__all__ = (
+    "Document",
+    "EmbeddedDocument",
+    "DynamicDocument",
+    "DynamicEmbeddedDocument",
+)
+
 _U = TypeVar("_U", bound="Document")
 
 _MetaDict = Mapping[str, Any]
+
+class DocumentId(Protocol):
+    # Empty method body (explicit '...')
+    def __eq__(self, other) -> bool:
+        ...
 
 class _UnderMetaDict(TypedDict):
     strict: bool
@@ -20,6 +32,9 @@ class Document(BaseDocument):
     meta: _MetaDict
     _meta: _UnderMetaDict
     _fields: Dict[str, Any]
+
+    objects: QuerySet
+    id: BaseField
 
     pk = StringField(required=True)
     @classmethod
@@ -60,6 +75,7 @@ class Document(BaseDocument):
         from: https://github.com/python/peps/commit/ada7d3566e26edf5381d1339b61e48a82c51c566#diff-da7d638a3d189515209a80943cdc8eaf196b75d20ccc0d6a796393c025d1f975R1169
         """
         ...
+    def to_dbref(self) -> DBRef: ...
 
 class EmbeddedDocument(BaseDocument):
     _fields: Dict[str, Any]
@@ -75,11 +91,3 @@ class DynamicDocument(Document):
 class DynamicEmbeddedDocument(EmbeddedDocument):
     def __getattr__(self, key: str) -> Any: ...
     def __setattr__(self, key: str, value: Any) -> None: ...
-
-__all__ = [
-    "DynamicDocument",
-    "EmbeddedDocument",
-    "DynamicEmbeddedDocument",
-    "Document",
-    "BaseDocument",
-]

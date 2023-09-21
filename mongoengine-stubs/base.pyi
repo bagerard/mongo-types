@@ -15,7 +15,10 @@ from bson import SON
 
 U = TypeVar("U", bound="BaseDocument")
 
+
 class BaseDocument:
+    _data: Dict[str, Any]
+
     def to_mongo(self, use_db_field: bool = ..., fields: List[str] = ...) -> SON: ...
     def validate(self, clean: bool = ...) -> None: ...
     def to_json(self, *args: Any, **kwargs: Any) -> str: ...
