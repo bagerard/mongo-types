@@ -59,6 +59,7 @@ __all__ = [
     "PointField",
     "MapField",
     "ReferenceField",
+    "GenericReferenceField",
     "EnumField",
     "CachedReferenceField",
     "FileField",
